@@ -1,0 +1,23 @@
+lib/
+├── main.dart
+├── config/
+│   └── theme.dart             # カラーテーマやスタイルの設定
+├── models/
+│   └── food_record.dart       # FoodRecordモデル定義
+├── screens/
+│   ├── home_screen.dart       # 一覧表示（タイムライン）
+│   ├── add_edit_screen.dart   # 新規登録・編集
+│   ├── detail_screen.dart     # 詳細表示
+│   ├── category_screen.dart   # カテゴリ・お気に入り絞り込み
+│   └── settings_screen.dart   # 通知設定・共有など
+├── widgets/
+│   ├── food_card.dart         # 1件の食事を表示するカードUI
+│   └── custom_app_bar.dart    # 共通AppBar（必要であれば）
+├── services/
+│   ├── database_service.dart  # sqflite/hiveによる保存処理
+│   ├── notification_service.dart # 通知機能（ローカル通知）
+│   └── share_service.dart     # 共有処理
+├── providers/
+│   └── food_provider.dart     # 状態管理（provider/riverpodなど）
+└── utils/
+    └── helpers.dart           # 日付フォーマットや共通処理
