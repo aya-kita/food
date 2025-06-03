@@ -12,7 +12,11 @@ lib/
 │   ├── category_screen.dart   # カテゴリ・お気に入り絞り込み
 │   └── settings_screen.dart   # 通知設定・共有など
 ├── view_models/
-│   └── food_provider.dart     # 状態管理（provider/riverpodなど）
+│   └── multi/
+│       ├── photo_list_view_model.dart # 複数のviewmodel
+│   ├── single/  # 単一のViewModel
+│       ├── add_post_viewmodel.dart # 新規登録・編集用のViewModel
+│    
 ├── widgets/
 │   ├── food_card.dart         # 1件の食事を表示するカードUI
 │   └── custom_app_bar.dart    # 共通AppBar（必要であれば）
