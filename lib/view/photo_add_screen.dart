@@ -91,14 +91,18 @@ class _PhotoAddScreenState extends ConsumerState<PhotoAddScreen> {
           '追加画面',
           style: TextStyle(color: Colors.black), // 文字色を黒に
         ),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('images/background.png'), fit: BoxFit.cover),
+          ),
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black), // アイコン色を黒に
           onPressed: () {
             context.go('/list'); // GoRouterで前の画面に戻る
           },
         ),
-        backgroundColor: const Color(0xFFF8F5EC), // AppBarの背景色を本体の背景色に合わせる
-        elevation: 0, // 影をなくす
       ),
       body: Stack(
         children: [
@@ -116,7 +120,13 @@ class _PhotoAddScreenState extends ConsumerState<PhotoAddScreen> {
           SafeArea(
             child: Container(
               // 背景画像の上に薄い背景色を重ねることで、UI要素を見やすくする
-              color: const Color(0xFFF8F5EC).withOpacity(0.9), // 背景画像の上に重ねる色
+              decoration: BoxDecoration(
+                color: Colors.black,
+                image: DecorationImage(
+                  image: AssetImage('images/background.png'),
+                  fit: BoxFit.cover,
+                ),
+              ),
               padding: const EdgeInsets.all(20.0),
               child: SingleChildScrollView(
                 child: Column(
