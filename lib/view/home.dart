@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:food/app_router.dart';
+import 'package:go_router/go_router.dart';
 
-class HomePage extends ConsumerWidget{
+class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext contect,WidgetRef ref){
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: Container(
         child: Stack(
@@ -15,26 +16,35 @@ class HomePage extends ConsumerWidget{
               decoration: BoxDecoration(
                 color: Colors.black,
                 image: DecorationImage(
-                  image: AssetImage('images/background.jpg'), 
+                  image: AssetImage('images/background.png'),
                   fit: BoxFit.cover,
                 ),
               ),
             ),
             SafeArea(
-              child: Center(
-                child: Text(
-                  '画面一杯に画像',
-                  style: TextStyle(
-                    color: Colors.white,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'HOME PAGE',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
                   ),
-                ),
+                  SizedBox(height: 20), // スペース
+                  ElevatedButton(
+                    onPressed: () {
+                      context.go('/list'); // ここに画面遷移のコードを挿入します
+                    },
+                    child: const Text("Go To List Screen"),
+                  ),
+                ],
               ),
             ),
           ],
         ),
       ),
     );
-
   }
 }
 
