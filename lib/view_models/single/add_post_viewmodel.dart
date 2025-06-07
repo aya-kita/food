@@ -14,8 +14,8 @@ class AddPostViewModel extends _$AddPostViewModel {
   
   //初期の条件を定義
   AddPostState build() {
-    return const AddPostState(
-      draft: Post(username: '', title: '', imageUrl: ''),
+    return AddPostState(
+      draft: Post(id:0,username: '', title: '', imageUrl: '',createdAt: DateTime.now()),
     );
   }
   
@@ -76,7 +76,7 @@ class AddPostViewModel extends _$AddPostViewModel {
   //投稿の下書き状態（draft）を初期値（空の状態）に戻す
   void resetDraft() {
     state = state.copyWith(
-      draft: const Post(username: '', title: '', imageUrl: ''),
+      draft: Post(id:0,username: '', title: '', imageUrl: '', createdAt: DateTime.now()),
     );
   }
 } 

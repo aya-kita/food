@@ -15,9 +15,11 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$Post {
+  int get id; // FastAPIの id に対応
   String get username;
   String get title;
   String get imageUrl;
+  DateTime get createdAt;
 
   /// Create a copy of Post
   /// with the given fields replaced by the non-null parameter values.
@@ -34,20 +36,24 @@ mixin _$Post {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is Post &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.username, username) ||
                 other.username == username) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.imageUrl, imageUrl) ||
-                other.imageUrl == imageUrl));
+                other.imageUrl == imageUrl) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, username, title, imageUrl);
+  int get hashCode =>
+      Object.hash(runtimeType, id, username, title, imageUrl, createdAt);
 
   @override
   String toString() {
-    return 'Post(username: $username, title: $title, imageUrl: $imageUrl)';
+    return 'Post(id: $id, username: $username, title: $title, imageUrl: $imageUrl, createdAt: $createdAt)';
   }
 }
 
@@ -56,7 +62,12 @@ abstract mixin class $PostCopyWith<$Res> {
   factory $PostCopyWith(Post value, $Res Function(Post) _then) =
       _$PostCopyWithImpl;
   @useResult
-  $Res call({String username, String title, String imageUrl});
+  $Res call(
+      {int id,
+      String username,
+      String title,
+      String imageUrl,
+      DateTime createdAt});
 }
 
 /// @nodoc
@@ -71,11 +82,17 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? username = null,
     Object? title = null,
     Object? imageUrl = null,
+    Object? createdAt = null,
   }) {
     return _then(_self.copyWith(
+      id: null == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
       username: null == username
           ? _self.username
           : username // ignore: cast_nullable_to_non_nullable
@@ -88,6 +105,10 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
           ? _self.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
+      createdAt: null == createdAt
+          ? _self.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
     ));
   }
 }
@@ -96,15 +117,24 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
 @JsonSerializable()
 class _Post implements Post {
   const _Post(
-      {required this.username, required this.title, required this.imageUrl});
+      {required this.id,
+      required this.username,
+      required this.title,
+      required this.imageUrl,
+      required this.createdAt});
   factory _Post.fromJson(Map<String, dynamic> json) => _$PostFromJson(json);
 
+  @override
+  final int id;
+// FastAPIの id に対応
   @override
   final String username;
   @override
   final String title;
   @override
   final String imageUrl;
+  @override
+  final DateTime createdAt;
 
   /// Create a copy of Post
   /// with the given fields replaced by the non-null parameter values.
@@ -126,20 +156,24 @@ class _Post implements Post {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _Post &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.username, username) ||
                 other.username == username) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.imageUrl, imageUrl) ||
-                other.imageUrl == imageUrl));
+                other.imageUrl == imageUrl) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, username, title, imageUrl);
+  int get hashCode =>
+      Object.hash(runtimeType, id, username, title, imageUrl, createdAt);
 
   @override
   String toString() {
-    return 'Post(username: $username, title: $title, imageUrl: $imageUrl)';
+    return 'Post(id: $id, username: $username, title: $title, imageUrl: $imageUrl, createdAt: $createdAt)';
   }
 }
 
@@ -149,7 +183,12 @@ abstract mixin class _$PostCopyWith<$Res> implements $PostCopyWith<$Res> {
       __$PostCopyWithImpl;
   @override
   @useResult
-  $Res call({String username, String title, String imageUrl});
+  $Res call(
+      {int id,
+      String username,
+      String title,
+      String imageUrl,
+      DateTime createdAt});
 }
 
 /// @nodoc
@@ -164,11 +203,17 @@ class __$PostCopyWithImpl<$Res> implements _$PostCopyWith<$Res> {
   @override
   @pragma('vm:prefer-inline')
   $Res call({
+    Object? id = null,
     Object? username = null,
     Object? title = null,
     Object? imageUrl = null,
+    Object? createdAt = null,
   }) {
     return _then(_Post(
+      id: null == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
       username: null == username
           ? _self.username
           : username // ignore: cast_nullable_to_non_nullable
@@ -181,6 +226,10 @@ class __$PostCopyWithImpl<$Res> implements _$PostCopyWith<$Res> {
           ? _self.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
+      createdAt: null == createdAt
+          ? _self.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
     ));
   }
 }
