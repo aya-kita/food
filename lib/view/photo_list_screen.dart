@@ -99,7 +99,6 @@ class PhotoListScreen extends ConsumerWidget {
                         fit: BoxFit.cover,
                       ),
                     ),
-                    // ★AsyncValue の変更点
                     child: paginatedPostsAsyncValue.when(
                       loading: () => const Center(child: CircularProgressIndicator()),
                       error: (err, stack) => Center(
