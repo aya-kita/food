@@ -38,6 +38,13 @@ class HomePage extends ConsumerWidget {
                     },
                     child: const Text("Go To List Screen"),
                   ),
+                  // SizedBox(height: 20), // スペース
+                  // ElevatedButton(
+                  //   onPressed: () {
+                  //     context.go('/about'); // ここに画面遷移のコードを挿入します
+                  //   },
+                  //   child: const Text("Go To Detail Screen"),
+                  // ),
                 ],
               ),
             ),
