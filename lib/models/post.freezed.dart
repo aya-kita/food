@@ -14,12 +14,12 @@ part of 'post.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$Post {
-  int get id; // FastAPIの id に対応
+mixin _$Post implements DiagnosticableTreeMixin {
+  int get id;
   String get username;
   String get title;
-  String get imageUrl;
-  DateTime get createdAt;
+  String? get imageUrl; // これは修正済みのはず
+  DateTime get created_at;
 
   /// Create a copy of Post
   /// with the given fields replaced by the non-null parameter values.
@@ -32,6 +32,17 @@ mixin _$Post {
   Map<String, dynamic> toJson();
 
   @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties
+      ..add(DiagnosticsProperty('type', 'Post'))
+      ..add(DiagnosticsProperty('id', id))
+      ..add(DiagnosticsProperty('username', username))
+      ..add(DiagnosticsProperty('title', title))
+      ..add(DiagnosticsProperty('imageUrl', imageUrl))
+      ..add(DiagnosticsProperty('created_at', created_at));
+  }
+
+  @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
@@ -42,18 +53,18 @@ mixin _$Post {
             (identical(other.title, title) || other.title == title) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+            (identical(other.created_at, created_at) ||
+                other.created_at == created_at));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, id, username, title, imageUrl, createdAt);
+      Object.hash(runtimeType, id, username, title, imageUrl, created_at);
 
   @override
-  String toString() {
-    return 'Post(id: $id, username: $username, title: $title, imageUrl: $imageUrl, createdAt: $createdAt)';
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'Post(id: $id, username: $username, title: $title, imageUrl: $imageUrl, created_at: $created_at)';
   }
 }
 
@@ -66,8 +77,8 @@ abstract mixin class $PostCopyWith<$Res> {
       {int id,
       String username,
       String title,
-      String imageUrl,
-      DateTime createdAt});
+      String? imageUrl,
+      DateTime created_at});
 }
 
 /// @nodoc
@@ -85,8 +96,8 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
     Object? id = null,
     Object? username = null,
     Object? title = null,
-    Object? imageUrl = null,
-    Object? createdAt = null,
+    Object? imageUrl = freezed,
+    Object? created_at = null,
   }) {
     return _then(_self.copyWith(
       id: null == id
@@ -101,13 +112,13 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
           ? _self.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      imageUrl: null == imageUrl
+      imageUrl: freezed == imageUrl
           ? _self.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
-              as String,
-      createdAt: null == createdAt
-          ? _self.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
+              as String?,
+      created_at: null == created_at
+          ? _self.created_at
+          : created_at // ignore: cast_nullable_to_non_nullable
               as DateTime,
     ));
   }
@@ -115,26 +126,26 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
 
 /// @nodoc
 @JsonSerializable()
-class _Post implements Post {
+class _Post with DiagnosticableTreeMixin implements Post {
   const _Post(
       {required this.id,
       required this.username,
       required this.title,
       required this.imageUrl,
-      required this.createdAt});
+      required this.created_at});
   factory _Post.fromJson(Map<String, dynamic> json) => _$PostFromJson(json);
 
   @override
   final int id;
-// FastAPIの id に対応
   @override
   final String username;
   @override
   final String title;
   @override
-  final String imageUrl;
+  final String? imageUrl;
+// これは修正済みのはず
   @override
-  final DateTime createdAt;
+  final DateTime created_at;
 
   /// Create a copy of Post
   /// with the given fields replaced by the non-null parameter values.
@@ -152,6 +163,17 @@ class _Post implements Post {
   }
 
   @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties
+      ..add(DiagnosticsProperty('type', 'Post'))
+      ..add(DiagnosticsProperty('id', id))
+      ..add(DiagnosticsProperty('username', username))
+      ..add(DiagnosticsProperty('title', title))
+      ..add(DiagnosticsProperty('imageUrl', imageUrl))
+      ..add(DiagnosticsProperty('created_at', created_at));
+  }
+
+  @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
@@ -162,18 +184,18 @@ class _Post implements Post {
             (identical(other.title, title) || other.title == title) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+            (identical(other.created_at, created_at) ||
+                other.created_at == created_at));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, id, username, title, imageUrl, createdAt);
+      Object.hash(runtimeType, id, username, title, imageUrl, created_at);
 
   @override
-  String toString() {
-    return 'Post(id: $id, username: $username, title: $title, imageUrl: $imageUrl, createdAt: $createdAt)';
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'Post(id: $id, username: $username, title: $title, imageUrl: $imageUrl, created_at: $created_at)';
   }
 }
 
@@ -187,8 +209,8 @@ abstract mixin class _$PostCopyWith<$Res> implements $PostCopyWith<$Res> {
       {int id,
       String username,
       String title,
-      String imageUrl,
-      DateTime createdAt});
+      String? imageUrl,
+      DateTime created_at});
 }
 
 /// @nodoc
@@ -206,8 +228,8 @@ class __$PostCopyWithImpl<$Res> implements _$PostCopyWith<$Res> {
     Object? id = null,
     Object? username = null,
     Object? title = null,
-    Object? imageUrl = null,
-    Object? createdAt = null,
+    Object? imageUrl = freezed,
+    Object? created_at = null,
   }) {
     return _then(_Post(
       id: null == id
@@ -222,13 +244,13 @@ class __$PostCopyWithImpl<$Res> implements _$PostCopyWith<$Res> {
           ? _self.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      imageUrl: null == imageUrl
+      imageUrl: freezed == imageUrl
           ? _self.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
-              as String,
-      createdAt: null == createdAt
-          ? _self.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
+              as String?,
+      created_at: null == created_at
+          ? _self.created_at
+          : created_at // ignore: cast_nullable_to_non_nullable
               as DateTime,
     ));
   }

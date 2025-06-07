@@ -1,56 +1,20 @@
+// lib/screens/photo_list_screen.dart
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
-// 表示するアイテムのダミーデータモデル
-class FoodItem {
-  final String shopName;
-  final String menuName;
-  final String date;
-  final String imageUrl; // ローカルアセットまたはネットワークURL
-
-  FoodItem({
-    required this.shopName,
-    required this.menuName,
-    required this.date,
-    required this.imageUrl,
-  });
-}
+import 'package:intl/intl.dart'; 
+import 'package:food/view_models/multi/photo_list_view_model.dart';
 
 class PhotoListScreen extends ConsumerWidget {
   PhotoListScreen({super.key});
 
-  // ダミーデータ
-  final List<FoodItem> _dummyItems = [
-    FoodItem(
-      shopName: '〇〇喫茶店',
-      menuName: '〇〇',
-      date: '2025.06.04',
-      imageUrl: 'images/dish1.png', // この画像はassetsに追加してください
-    ),
-    FoodItem(
-      shopName: '〇〇喫茶店',
-      menuName: '〇〇',
-      date: '2025.06.04',
-      imageUrl: 'images/dish2.png', // この画像はassetsに追加してください
-    ),
-    FoodItem(
-      shopName: '〇〇喫茶店',
-      menuName: '〇〇',
-      date: '2025.06.04',
-      imageUrl: 'images/dish3.png', // この画像はassetsに追加してください
-    ),
-    FoodItem(
-      shopName: '〇〇喫茶店',
-      menuName: '〇〇',
-      date: '2025.06.04',
-      imageUrl: 'images/dish4.png', // この画像はassetsに追加してください
-    ),
-    // 必要に応じてダミーデータを追加
-  ];
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // PostListViewModel から投稿データを監視
+    final paginatedPostsAsyncValue = ref.watch(postListViewModelProvider); // 型が変わる
+    final viewModel = ref.read(postListViewModelProvider.notifier); // リフレッシュ用
+
     return Scaffold(
       body: Stack(
         children: [
@@ -58,7 +22,7 @@ class PhotoListScreen extends ConsumerWidget {
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('images/background.png'), // 元の背景画像を維持
+                image: AssetImage('images/background.png'),
                 fit: BoxFit.cover,
               ),
             ),
@@ -69,7 +33,7 @@ class PhotoListScreen extends ConsumerWidget {
               children: [
                 // ヘッダー部分 (戻るボタン、カテゴリ選択、追加ボタン)
                 Container(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.black,
                     image: DecorationImage(
                       image: AssetImage('images/background.png'),
@@ -81,40 +45,45 @@ class PhotoListScreen extends ConsumerWidget {
                   child: Row(
                     children: [
                       IconButton(
-                        icon: const Icon(Icons.arrow_back, color: Colors.black),
+                        icon: const Icon(Icons.arrow_back, color: Colors.white),
                         onPressed: () {
-                          context.pop(); // 前の画面に戻る
+                          context.pop();
                         },
                       ),
                       const SizedBox(width: 8),
                       Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12.0, vertical: 8.0),
-                          decoration: BoxDecoration(
-                            color: Colors.brown[700], // UI画像の色に合わせる
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text(
-                                'カテゴリー選択',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 16),
-                              ),
-                              const Icon(Icons.arrow_drop_down,
-                                  color: Colors.white),
-                            ],
+                        child: GestureDetector(
+                          onTap: () {
+                            print('カテゴリー選択がタップされました');
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12.0, vertical: 8.0),
+                            decoration: BoxDecoration(
+                              color: Colors.brown[700],
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'カテゴリー選択',
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 16),
+                                ),
+                                Icon(Icons.arrow_drop_down,
+                                    color: Colors.white),
+                              ],
+                            ),
                           ),
                         ),
                       ),
                       const SizedBox(width: 8),
                       IconButton(
                         icon: const Icon(Icons.add_circle_outline,
-                            color: Colors.black, size: 30),
+                            color: Colors.white, size: 30),
                         onPressed: () {
-                          context.go('/add'); // 写真追加画面へ遷移
+                          context.go('/add');
                         },
                       ),
                     ],
@@ -123,106 +92,157 @@ class PhotoListScreen extends ConsumerWidget {
                 // コンテンツ部分 (リスト表示)
                 Expanded(
                   child: Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Colors.black,
                       image: DecorationImage(
                         image: AssetImage('images/background.png'),
                         fit: BoxFit.cover,
                       ),
                     ),
-                    child: ListView.builder(
-                      padding: const EdgeInsets.all(16.0),
-                      itemCount: _dummyItems.length,
-                      itemBuilder: (context, index) {
-                        final item = _dummyItems[index];
-                        // 奇数番目と偶数番目でレイアウトを反転
-                        final bool isEven = index % 2 == 0;
+                    // ★AsyncValue の変更点
+                    child: paginatedPostsAsyncValue.when(
+                      loading: () => const Center(child: CircularProgressIndicator()),
+                      error: (err, stack) => Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('エラー: $err', style: const TextStyle(color: Colors.red)),
+                            ElevatedButton(
+                              onPressed: () => viewModel.refreshPosts(),
+                              child: const Text('再試行'),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // data が PaginatedPosts オブジェクトになる
+                      data: (paginatedPosts) {
+                        final posts = paginatedPosts.posts; // 投稿リストを取得
+                        if (posts.isEmpty) {
+                          return const Center(child: Text('投稿がありません', style: TextStyle(color: Colors.white)));
+                        }
+                        return ListView.builder(
+                          padding: const EdgeInsets.all(16.0),
+                          itemCount: posts.length, // 現在のページの投稿数
+                          itemBuilder: (context, index) {
+                            final post = posts[index];
+                            final bool isEven = index % 2 == 0;
 
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              if (!isEven) // 奇数番目はテキストが左
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.end, // 右寄せ
-                                    children: [
-                                      Text(
-                                        item.shopName,
-                                        style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black),
+                            final formattedDate = DateFormat('yyyy.MM.dd')
+                                .format(post.created_at);
+
+                            final imageUrl = 'http://127.0.0.1:8000${post.imageUrl}';
+
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10.0),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  if (isEven)
+                                    Expanded(
+                                      flex: 2,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(8.0),
+                                        child: Image.network(
+                                          imageUrl,
+                                          fit: BoxFit.cover,
+                                          height: 150,
+                                          errorBuilder: (context, error, stackTrace) {
+                                            print('Image load error: $error for URL: $imageUrl');
+                                            return Container(
+                                              height: 150,
+                                              color: Colors.grey[300],
+                                              child: const Icon(
+                                                  Icons.image_not_supported,
+                                                  color: Colors.grey),
+                                            );
+                                          },
+                                        ),
                                       ),
-                                      Text(
-                                        item.menuName,
-                                        style: const TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.black54),
+                                    ),
+                                  if (isEven) const SizedBox(width: 16),
+                                  if (isEven)
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            post.username,
+                                            style: const TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white),
+                                          ),
+                                          Text(
+                                            post.title,
+                                            style: const TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.white70),
+                                          ),
+                                          Text(
+                                            formattedDate,
+                                            style: const TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.white54),
+                                          ),
+                                        ],
                                       ),
-                                      Text(
-                                        item.date,
-                                        style: const TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.black38),
+                                    ),
+                                  if (!isEven)
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          Text(
+                                            post.username,
+                                            style: const TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white),
+                                          ),
+                                          Text(
+                                            post.title,
+                                            style: const TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.white70),
+                                          ),
+                                          Text(
+                                            formattedDate,
+                                            style: const TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.white54),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                ),
-                              if (!isEven) const SizedBox(width: 16),
-                              Expanded(
-                                flex: 2, // 画像を少し大きく
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  child: Image.asset(
-                                    item.imageUrl,
-                                    fit: BoxFit.cover,
-                                    height: 150, // 画像の高さを固定
-                                    errorBuilder: (context, error, stackTrace) {
-                                      return Container(
-                                        height: 150,
-                                        color: Colors.grey[300],
-                                        child: const Icon(
-                                            Icons.image_not_supported,
-                                            color: Colors.grey),
-                                      );
-                                    },
-                                  ),
-                                ),
+                                    ),
+                                  if (!isEven) const SizedBox(width: 16),
+                                  if (!isEven)
+                                    Expanded(
+                                      flex: 2,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(8.0),
+                                        child: Image.network(
+                                          imageUrl,
+                                          fit: BoxFit.cover,
+                                          height: 150,
+                                          errorBuilder: (context, error, stackTrace) {
+                                            print('Image load error: $error for URL: $imageUrl');
+                                            return Container(
+                                              height: 150,
+                                              color: Colors.grey[300],
+                                              child: const Icon(
+                                                  Icons.image_not_supported,
+                                                  color: Colors.grey),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                ],
                               ),
-                              if (isEven) const SizedBox(width: 16),
-                              if (isEven) // 偶数番目はテキストが右
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start, // 左寄せ
-                                    children: [
-                                      Text(
-                                        item.shopName,
-                                        style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black),
-                                      ),
-                                      Text(
-                                        item.menuName,
-                                        style: const TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.black54),
-                                      ),
-                                      Text(
-                                        item.date,
-                                        style: const TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.black38),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                            ],
-                          ),
+                            );
+                          },
                         );
                       },
                     ),
@@ -230,7 +250,7 @@ class PhotoListScreen extends ConsumerWidget {
                 ),
                 // フッター部分 (ページネーション)
                 Container(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.black,
                     image: DecorationImage(
                       image: AssetImage('images/background.png'),
@@ -239,38 +259,49 @@ class PhotoListScreen extends ConsumerWidget {
                   ),
                   padding: const EdgeInsets.symmetric(
                       horizontal: 16.0, vertical: 8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.arrow_back_ios,
-                            color: Colors.black, size: 20),
-                        onPressed: () {
-                          print('前のページへ');
-                        },
-                      ),
-                      const SizedBox(width: 10),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 5),
-                        decoration: BoxDecoration(
-                          color: Colors.brown[700], // UI画像の色に合わせる
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: const Text(
-                          '1ページ目',
-                          style: TextStyle(color: Colors.white, fontSize: 14),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      IconButton(
-                        icon: const Icon(Icons.arrow_forward_ios,
-                            color: Colors.black, size: 20),
-                        onPressed: () {
-                          print('次のページへ');
-                        },
-                      ),
-                    ],
+                  child: paginatedPostsAsyncValue.when(
+                    loading: () => const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(color: Colors.white),
+                      ],
+                    ),
+                    error: (err, stack) => const SizedBox.shrink(), // エラー時は非表示
+                    data: (paginatedPosts) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.arrow_back_ios,
+                                color: Colors.white, size: 20),
+                            onPressed: paginatedPosts.hasPreviousPage
+                                ? () => viewModel.goToPreviousPage()
+                                : null, // ページがない場合は無効化
+                          ),
+                          const SizedBox(width: 10),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 5),
+                            decoration: BoxDecoration(
+                              color: Colors.brown[700],
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Text(
+                              '${paginatedPosts.currentPage} / ${paginatedPosts.totalPages} ページ',
+                              style: const TextStyle(color: Colors.white, fontSize: 14),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          IconButton(
+                            icon: const Icon(Icons.arrow_forward_ios,
+                                color: Colors.white, size: 20),
+                            onPressed: paginatedPosts.hasNextPage
+                                ? () => viewModel.goToNextPage()
+                                : null, // ページがない場合は無効化
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ),
               ],

@@ -10,8 +10,8 @@ _Post _$PostFromJson(Map<String, dynamic> json) => _Post(
       id: (json['id'] as num).toInt(),
       username: json['username'] as String,
       title: json['title'] as String,
-      imageUrl: json['imageUrl'] as String,
-      createdAt: DateTime.parse(json['createdAt'] as String),
+      imageUrl: json['imageUrl'] as String?,
+      created_at: DateTime.parse(json['created_at'] as String),
     );
 
 Map<String, dynamic> _$PostToJson(_Post instance) => <String, dynamic>{
@@ -19,5 +19,5 @@ Map<String, dynamic> _$PostToJson(_Post instance) => <String, dynamic>{
       'username': instance.username,
       'title': instance.title,
       'imageUrl': instance.imageUrl,
-      'createdAt': instance.createdAt.toIso8601String(),
+      'created_at': instance.created_at.toIso8601String(),
     };

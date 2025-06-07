@@ -1,83 +1,117 @@
+// add_post_viewmodel.dart
 import 'dart:io';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import 'package:food/models/post.dart';
 import 'package:food/state/add_post_state.dart';
 
 part 'add_post_viewmodel.g.dart';
 
-
-@Riverpod(keepAlive: true)
+@riverpod
 class AddPostViewModel extends _$AddPostViewModel {
   @override
-  
-  //初期の条件を定義
   AddPostState build() {
     return AddPostState(
-      draft: Post(id:0,username: '', title: '', imageUrl: '',createdAt: DateTime.now()),
+      draft: Post(id:0,username: '', title: '', imageUrl: '',created_at: DateTime.now()),
+
     );
   }
-  
-  // ユーザー名、タイトル、画像URLを更新するメソッド
+
   void updateDraft({String? username, String? title, String? imageUrl}) {
-      var updated = state.draft;
+    var updated = state.draft;
+    if (username != null) updated = updated.copyWith(username: username);
+    if (title != null) updated = updated.copyWith(title: title);
+    if (imageUrl != null) updated = updated.copyWith(imageUrl: imageUrl);
 
-      if (username != null) {
-        updated = updated.copyWith(username: username);
-      }
-      if (title != null) {
-        updated = updated.copyWith(title: title);
-      }
-      if (imageUrl != null) {
-        updated = updated.copyWith(imageUrl: imageUrl);
-      }
-
-      state = state.copyWith(draft: updated);
-    }
-
-  
-  // 画像ファイルを追加するメソッド
-  void addFile(File file) {
-    state = state.copyWith(file: file);
+    state = state.copyWith(draft: updated);
   }
 
-  Future<void> submitPost(File imageFile) async {
-    state = state.copyWith(isSubmitting: true, errorMessage: null);
-    try {
-      final uploadedImageUrl = await uploadImage(imageFile);
-      state = state.copyWith(
-        draft: state.draft.copyWith(imageUrl: uploadedImageUrl),
-      );
+  void addFile(File file) {
+  print('addFile called with path: ${file.path}');
+  state = state.copyWith(file: file);
+  print('state.file after update: ${state.file?.path}');
+}
 
-      // 実際の投稿処理を行う（例: API呼び出し）
-      await _postToServer(state.draft);
-    } catch (e, stack) {
+  Future<void> submitPost() async {
+    print('submitPost: Method started.'); // 追加
+    if (state.file == null) {
+      state = state.copyWith(errorMessage: "画像ファイルが選択されていません");
+      print('submitPost: No file selected, returning.'); // 追加
+      return;
+    }
+    state = state.copyWith(isSubmitting: true, errorMessage: null);
+    print('submitPost: isSubmitting set to true.'); // 追加
+
+    try {
+      print('submitPost: Attempting to upload image...'); // 追加
+      final uploadedImageUrl = await _uploadImage(state.file!);
+      print('submitPost: Image uploaded. URL: $uploadedImageUrl'); // 追加
+
+      var updatedDraft = state.draft.copyWith(imageUrl: uploadedImageUrl);
+      print('submitPost: Draft updated with imageUrl: ${updatedDraft.imageUrl}'); // 追加
+
+      print('submitPost: Attempting to post to server...'); // 追加
+      await _postToServer(updatedDraft);
+      print('submitPost: Post to server successful.'); // 追加
+
+      resetDraft();
+      print('submitPost: Draft reset.'); // 追加
+
+    } catch (e) {
+      print('submitPost: Error caught: $e'); // ここにエラーが出たら原因が分かる
       state = state.copyWith(errorMessage: e.toString());
     } finally {
+      print('submitPost: Finally block executed. isSubmitting set to false.'); // 追加
       state = state.copyWith(isSubmitting: false);
     }
   }
 
-  Future<String> uploadImage(File file) async {
-    // TODO: 実際のアップロード処理に差し替える
-    await Future.delayed(Duration(seconds: 1));
-    return 'https://example.com/uploaded_image.jpg';
-  }
-
+  // _postToServer メソッドの中にも念のためログを追加
   Future<void> _postToServer(Post post) async {
-    // TODO: 実際の投稿処理（API呼び出しなど）
-    await Future.delayed(Duration(seconds: 1));
+    final uri = Uri.parse('http://127.0.0.1:8000/posts/');
+    print('_postToServer: Sending POST request to: $uri'); // 追加
+    print('_postToServer: Request body: ${jsonEncode(post.toJson())}'); // 追加
+    final response = await http.post(
+      uri,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(post.toJson()),
+    );
+    print('_postToServer: Response status code: ${response.statusCode}'); // 追加
+    print('_postToServer: Response body: ${response.body}'); // 追加
+    if (response.statusCode != 200) {
+      print('_postToServer: Post failed with status: ${response.statusCode}'); // 追加
+      throw Exception('投稿に失敗しました: ${response.statusCode}');
+    }
+    print('_postToServer: Post successful.'); // 追加
   }
 
-  void clearError() {
-    state = state.copyWith(errorMessage: null);
+  Future<String> _uploadImage(File file) async {
+    final uri = Uri.parse("http://127.0.0.1:8000/upload-image/");
+    final request = http.MultipartRequest('POST', uri);
+    request.files.add(await http.MultipartFile.fromPath(
+      'file',
+      file.path,
+      contentType: MediaType('image', 'jpg'),
+    ));
+    final response = await request.send();
+
+    if (response.statusCode == 200) {
+      final responseBody = await response.stream.bytesToString();
+      final Map<String, dynamic> json = jsonDecode(responseBody);
+      // ↓↓↓ ここを修正します ↓↓↓
+      if (json.containsKey('url')) return json['url'] as String; // 'imageUrl' を 'url' に変更
+      // ↑↑↑ ここを修正します ↑↑↑
+      throw Exception("画像URLがレスポンスから取得できませんでした");
+    } else {
+      throw Exception("画像のアップロードに失敗しました: ${response.statusCode}");
+    }
   }
-  //投稿の下書き状態（draft）を初期値（空の状態）に戻す
   void resetDraft() {
     state = state.copyWith(
-      draft: Post(id:0,username: '', title: '', imageUrl: '', createdAt: DateTime.now()),
+      draft: Post(id:0,username: '', title: '', imageUrl: '', created_at: DateTime.now()),
+      file: null,
     );
   }
-} 
-
+}
