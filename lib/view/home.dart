@@ -20,6 +20,13 @@ class HomePage extends ConsumerWidget {
                   fit: BoxFit.cover,
                 ),
               ),
+              // decoration: BoxDecoration(
+              //   color: Colors.black,
+              //   image: DecorationImage(
+              //     image: AssetImage('images/background.jpg'), 
+              //     fit: BoxFit.cover,
+              //   ),
+              // ),
             ),
             SafeArea(
               child: Column(
