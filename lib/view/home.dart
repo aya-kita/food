@@ -1,27 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:food/app_router.dart';
+import 'package:go_router/go_router.dart';
 
-class HomePage extends ConsumerWidget{
+class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext contect,WidgetRef ref){
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: Container(
         child: Stack(
           children: [
             Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.black,
                 image: DecorationImage(
-                  image: AssetImage('images/background.jpg'), 
+                  image: AssetImage('images/restaurant_pixel_art.png'),
                   fit: BoxFit.cover,
                 ),
               ),
             ),
             SafeArea(
-              child: Center(
+              child: GestureDetector(
+                onTap: () {
+                  context.go('/list');
+                },
                 child: Text(
                   '画面一杯に画像',
                   style: TextStyle(
@@ -34,7 +38,6 @@ class HomePage extends ConsumerWidget{
         ),
       ),
     );
-
   }
 }
 
