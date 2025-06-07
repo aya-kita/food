@@ -113,18 +113,11 @@ class HomePage extends ConsumerWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
-                    Icons.person, // 人のアイコン
-                    color:
-                        const Color.fromARGB(255, 228, 198, 190), // マスターに見立てた色
-                    size: 80, // アイコンのサイズ
-                    shadows: [
-                      Shadow(
-                        offset: Offset(2.0, 2.0),
-                        blurRadius: 3.0,
-                        color: Colors.black.withOpacity(0.5),
-                      ),
-                    ],
+                  Image.asset(
+                    'images/master.png', // ★準備した画像のパスを指定★
+                    width: 150, // 画像の幅を調整（必要に応じて）
+                    height: 250, // 画像の高さを調整（必要に応じて）
+                    fit: BoxFit.cover, // 画像の表示方法を調整（必要に応じて）
                   ),
                   const SizedBox(height: 5),
                   const Text(
