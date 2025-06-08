@@ -2,13 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-<<<<<<< HEAD
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart'; 
+import 'package:intl/intl.dart';
 import 'package:food/view_models/multi/photo_list_view_model.dart';
-=======
-import 'package:food/app_router.dart';
->>>>>>> 46d64c8ae87c790954be5f23202a614ec06c1550
 
 class PhotoListScreen extends ConsumerWidget {
   PhotoListScreen({super.key});
@@ -16,11 +12,11 @@ class PhotoListScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // PostListViewModel から投稿データを監視
-    final paginatedPostsAsyncValue = ref.watch(postListViewModelProvider); // 型が変わる
+    final paginatedPostsAsyncValue =
+        ref.watch(postListViewModelProvider); // 型が変わる
     final viewModel = ref.read(postListViewModelProvider.notifier); // リフレッシュ用
 
     return Scaffold(
-<<<<<<< HEAD
       body: Stack(
         children: [
           // 背景画像
@@ -50,9 +46,9 @@ class PhotoListScreen extends ConsumerWidget {
                   child: Row(
                     children: [
                       IconButton(
-                        icon: const Icon(Icons.arrow_back, color: Colors.white),
+                        icon: const Icon(Icons.arrow_back, color: Colors.brown),
                         onPressed: () {
-                          context.pop();
+                          context.go('/');
                         },
                       ),
                       const SizedBox(width: 8),
@@ -86,7 +82,7 @@ class PhotoListScreen extends ConsumerWidget {
                       const SizedBox(width: 8),
                       IconButton(
                         icon: const Icon(Icons.add_circle_outline,
-                            color: Colors.white, size: 30),
+                            color: Colors.brown, size: 30),
                         onPressed: () {
                           context.go('/add');
                         },
@@ -105,12 +101,14 @@ class PhotoListScreen extends ConsumerWidget {
                       ),
                     ),
                     child: paginatedPostsAsyncValue.when(
-                      loading: () => const Center(child: CircularProgressIndicator()),
+                      loading: () =>
+                          const Center(child: CircularProgressIndicator()),
                       error: (err, stack) => Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('エラー: $err', style: const TextStyle(color: Colors.red)),
+                            Text('エラー: $err',
+                                style: const TextStyle(color: Colors.red)),
                             ElevatedButton(
                               onPressed: () => viewModel.refreshPosts(),
                               child: const Text('再試行'),
@@ -124,7 +122,9 @@ class PhotoListScreen extends ConsumerWidget {
 
                         final posts = paginatedPosts.posts; // 投稿リストを取得
                         if (posts.isEmpty) {
-                          return const Center(child: Text('投稿がありません', style: TextStyle(color: Colors.white)));
+                          return const Center(
+                              child: Text('投稿がありません',
+                                  style: TextStyle(color: Colors.white)));
                         }
                         return ListView.builder(
                           padding: const EdgeInsets.all(16.0),
@@ -136,10 +136,12 @@ class PhotoListScreen extends ConsumerWidget {
                             final formattedDate = DateFormat('yyyy.MM.dd')
                                 .format(post.created_at);
 
-                            final imageUrl = 'http://127.0.0.1:8000${post.imageUrl}';
+                            final imageUrl =
+                                'http://127.0.0.1:8000${post.imageUrl}';
 
                             return Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10.0),
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 10.0),
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -147,13 +149,16 @@ class PhotoListScreen extends ConsumerWidget {
                                     Expanded(
                                       flex: 2,
                                       child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(8.0),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
                                         child: Image.network(
                                           imageUrl,
                                           fit: BoxFit.cover,
                                           height: 130,
-                                          errorBuilder: (context, error, stackTrace) {
-                                            print('Image load error: $error for URL: $imageUrl');
+                                          errorBuilder:
+                                              (context, error, stackTrace) {
+                                            print(
+                                                'Image load error: $error for URL: $imageUrl');
                                             return Container(
                                               height: 130,
                                               color: Colors.grey[300],
@@ -227,13 +232,16 @@ class PhotoListScreen extends ConsumerWidget {
                                     Expanded(
                                       flex: 2,
                                       child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(8.0),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
                                         child: Image.network(
                                           imageUrl,
                                           fit: BoxFit.cover,
                                           height: 130,
-                                          errorBuilder: (context, error, stackTrace) {
-                                            print('Image load error: $error for URL: $imageUrl');
+                                          errorBuilder:
+                                              (context, error, stackTrace) {
+                                            print(
+                                                'Image load error: $error for URL: $imageUrl');
                                             return Container(
                                               height: 130,
                                               color: Colors.grey[300],
@@ -294,12 +302,14 @@ class PhotoListScreen extends ConsumerWidget {
                             ),
                             child: Text(
                               '${paginatedPosts.currentPage} / ${paginatedPosts.totalPages} ページ',
-                              style: const TextStyle(color: Colors.white, fontSize: 14),
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 14),
                             ),
                           ),
                           const SizedBox(width: 10),
                           IconButton(
-                            icon: const Icon(Icons.arrow_forward_ios, color: Colors.brown, size: 20),
+                            icon: const Icon(Icons.arrow_forward_ios,
+                                color: Colors.brown, size: 20),
                             onPressed: paginatedPosts.hasNextPage
                                 ? () {
                                     print('Next page pressed');
@@ -313,29 +323,6 @@ class PhotoListScreen extends ConsumerWidget {
                   ),
                 ),
               ],
-=======
-      body: Container(
-        child: Stack(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.black,
-                image: DecorationImage(
-                  image: AssetImage('images/background.jpg'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            SafeArea(
-              child: Center(
-                child: Text(
-                  '追加画面',
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-              ),
->>>>>>> 46d64c8ae87c790954be5f23202a614ec06c1550
             ),
           ),
         ],
