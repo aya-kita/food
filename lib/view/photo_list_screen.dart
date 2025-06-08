@@ -115,6 +115,8 @@ class PhotoListScreen extends ConsumerWidget {
                       ),
                       // data が PaginatedPosts オブジェクトになる
                       data: (paginatedPosts) {
+                        print('hasNextPage: ${paginatedPosts.hasNextPage}');
+
                         final posts = paginatedPosts.posts; // 投稿リストを取得
                         if (posts.isEmpty) {
                           return const Center(child: Text('投稿がありません', style: TextStyle(color: Colors.white)));
@@ -144,11 +146,11 @@ class PhotoListScreen extends ConsumerWidget {
                                         child: Image.network(
                                           imageUrl,
                                           fit: BoxFit.cover,
-                                          height: 150,
+                                          height: 130,
                                           errorBuilder: (context, error, stackTrace) {
                                             print('Image load error: $error for URL: $imageUrl');
                                             return Container(
-                                              height: 150,
+                                              height: 130,
                                               color: Colors.grey[300],
                                               child: const Icon(
                                                   Icons.image_not_supported,
@@ -170,19 +172,19 @@ class PhotoListScreen extends ConsumerWidget {
                                             style: const TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.white),
+                                                color: Colors.brown),
                                           ),
                                           Text(
                                             post.title,
                                             style: const TextStyle(
                                                 fontSize: 16,
-                                                color: Colors.white70),
+                                                color: Colors.brown),
                                           ),
                                           Text(
                                             formattedDate,
                                             style: const TextStyle(
                                                 fontSize: 14,
-                                                color: Colors.white54),
+                                                color: Colors.brown),
                                           ),
                                         ],
                                       ),
@@ -198,19 +200,19 @@ class PhotoListScreen extends ConsumerWidget {
                                             style: const TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.white),
+                                                color: Colors.brown),
                                           ),
                                           Text(
                                             post.title,
                                             style: const TextStyle(
                                                 fontSize: 16,
-                                                color: Colors.white70),
+                                                color: Colors.brown),
                                           ),
                                           Text(
                                             formattedDate,
                                             style: const TextStyle(
                                                 fontSize: 14,
-                                                color: Colors.white54),
+                                                color: Colors.brown),
                                           ),
                                         ],
                                       ),
@@ -224,11 +226,11 @@ class PhotoListScreen extends ConsumerWidget {
                                         child: Image.network(
                                           imageUrl,
                                           fit: BoxFit.cover,
-                                          height: 150,
+                                          height: 130,
                                           errorBuilder: (context, error, stackTrace) {
                                             print('Image load error: $error for URL: $imageUrl');
                                             return Container(
-                                              height: 150,
+                                              height: 130,
                                               color: Colors.grey[300],
                                               child: const Icon(
                                                   Icons.image_not_supported,
@@ -272,7 +274,7 @@ class PhotoListScreen extends ConsumerWidget {
                         children: [
                           IconButton(
                             icon: const Icon(Icons.arrow_back_ios,
-                                color: Colors.white, size: 20),
+                                color: Colors.brown, size: 20),
                             onPressed: paginatedPosts.hasPreviousPage
                                 ? () => viewModel.goToPreviousPage()
                                 : null, // ページがない場合は無効化
@@ -292,11 +294,13 @@ class PhotoListScreen extends ConsumerWidget {
                           ),
                           const SizedBox(width: 10),
                           IconButton(
-                            icon: const Icon(Icons.arrow_forward_ios,
-                                color: Colors.white, size: 20),
+                            icon: const Icon(Icons.arrow_forward_ios, color: Colors.brown, size: 20),
                             onPressed: paginatedPosts.hasNextPage
-                                ? () => viewModel.goToNextPage()
-                                : null, // ページがない場合は無効化
+                                ? () {
+                                    print('Next page pressed');
+                                    viewModel.goToNextPage();
+                                  }
+                                : null,
                           ),
                         ],
                       );

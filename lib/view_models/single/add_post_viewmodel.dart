@@ -70,7 +70,7 @@ class AddPostViewModel extends _$AddPostViewModel {
 
   // _postToServer メソッドの中にも念のためログを追加
   Future<void> _postToServer(Post post) async {
-    final uri = Uri.parse('http://127.0.0.1:8000/posts/');
+    final uri = Uri.parse('http://127.0.0.1:8000/posts');
     print('_postToServer: Sending POST request to: $uri'); // 追加
     print('_postToServer: Request body: ${jsonEncode(post.toJson())}'); // 追加
     final response = await http.post(

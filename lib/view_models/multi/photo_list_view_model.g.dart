@@ -6,10 +6,9 @@ part of 'photo_list_view_model.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$postListViewModelHash() => r'a85561a0b1446dc71b54bfe981ea774382aee366';
+String _$postListViewModelHash() => r'541d68050d1876240e06dd06cb38b281df6d0c06';
 
 /// 投稿リストの取得とページネーションを管理するViewModel
-/// Riverpodのコードジェネレータで利用するため @riverpod を付与
 ///
 /// Copied from [PostListViewModel].
 @ProviderFor(PostListViewModel)

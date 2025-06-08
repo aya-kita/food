@@ -12,7 +12,7 @@ abstract class Post with _$Post {
     required String username,
     required String title,
     required String? imageUrl, // これは修正済みのはず
-    required DateTime created_at, 
+    required DateTime created_at,
   }) = _Post;
 
   factory Post.fromJson(Map<String, dynamic> json) => _$PostFromJson(json);
