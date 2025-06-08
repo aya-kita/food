@@ -49,6 +49,13 @@ class HomePage extends ConsumerWidget {
                 image: AssetImage('images/restaurant_pixel_art.png'),
                 fit: BoxFit.cover,
               ),
+              // decoration: BoxDecoration(
+              //   color: Colors.black,
+              //   image: DecorationImage(
+              //     image: AssetImage('images/background.jpg'), 
+              //     fit: BoxFit.cover,
+              //   ),
+              // ),
             ),
           ),
           // メニュー表ボタン (既存のコード)

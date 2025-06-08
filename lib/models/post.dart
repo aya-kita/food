@@ -1,4 +1,3 @@
-// lib/model/post.dart
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'post.freezed.dart';
