@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:food/app_router.dart';
-import 'package:go_router/go_router.dart';
 
 class PhotoListScreen extends ConsumerWidget {
   const PhotoListScreen({super.key});
@@ -16,29 +15,19 @@ class PhotoListScreen extends ConsumerWidget {
               decoration: BoxDecoration(
                 color: Colors.black,
                 image: DecorationImage(
-                  image: AssetImage('images/background.png'),
+                  image: AssetImage('images/background.jpg'),
                   fit: BoxFit.cover,
                 ),
               ),
             ),
             SafeArea(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'LIST PAGE',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
+              child: Center(
+                child: Text(
+                  '追加画面',
+                  style: TextStyle(
+                    color: Colors.white,
                   ),
-                  SizedBox(height: 20), // スペース
-                  ElevatedButton(
-                    onPressed: () {
-                      context.go('/add'); // ここに画面遷移のコードを挿入します
-                    },
-                    child: const Text("Go To Add Screen"),
-                  ),
-                ],
+                ),
               ),
             ),
           ],
