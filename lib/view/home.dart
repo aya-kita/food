@@ -18,6 +18,12 @@ class HomePage extends ConsumerWidget {
       '自家製レモネード',
       'カプチーノ',
       'ハーブティー',
+      '水',
+      'お茶',
+      'ジンジャーエール',
+      'オレンジジュース',
+      'アイスティー',
+      'コーラ',
     ];
     final int randomIndex = DateTime.now().millisecond % drinks.length;
     return drinks[randomIndex];
