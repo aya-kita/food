@@ -34,7 +34,7 @@ class AddPostViewModel extends _$AddPostViewModel {
     print('state.file after update: ${state.file?.path}');
   }
 
-  Future<void> submitPost() async {
+  Future<void> submitPost(File file) async {
     print('submitPost: Method started.'); // 追加
     if (state.file == null) {
       state = state.copyWith(errorMessage: "画像ファイルが選択されていません");

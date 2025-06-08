@@ -1,14 +1,8 @@
-// lib/screens/photo_list_screen.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-<<<<<<< HEAD
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart'; 
 import 'package:food/view_models/multi/photo_list_view_model.dart';
-=======
-import 'package:food/app_router.dart';
->>>>>>> 46d64c8ae87c790954be5f23202a614ec06c1550
 
 class PhotoListScreen extends ConsumerWidget {
   PhotoListScreen({super.key});
@@ -16,11 +10,10 @@ class PhotoListScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // PostListViewModel から投稿データを監視
-    final paginatedPostsAsyncValue = ref.watch(postListViewModelProvider); // 型が変わる
-    final viewModel = ref.read(postListViewModelProvider.notifier); // リフレッシュ用
+    final paginatedPostsAsyncValue = ref.watch(postListViewModelProvider); 
+    final viewModel = ref.read(postListViewModelProvider.notifier); 
 
     return Scaffold(
-<<<<<<< HEAD
       body: Stack(
         children: [
           // 背景画像
@@ -118,23 +111,19 @@ class PhotoListScreen extends ConsumerWidget {
                           ],
                         ),
                       ),
-                      // data が PaginatedPosts オブジェクトになる
                       data: (paginatedPosts) {
-                        print('hasNextPage: ${paginatedPosts.hasNextPage}');
-
-                        final posts = paginatedPosts.posts; // 投稿リストを取得
+                        final posts = paginatedPosts.posts;
                         if (posts.isEmpty) {
                           return const Center(child: Text('投稿がありません', style: TextStyle(color: Colors.white)));
                         }
                         return ListView.builder(
                           padding: const EdgeInsets.all(16.0),
-                          itemCount: posts.length, // 現在のページの投稿数
+                          itemCount: posts.length,
                           itemBuilder: (context, index) {
                             final post = posts[index];
                             final bool isEven = index % 2 == 0;
 
-                            final formattedDate = DateFormat('yyyy.MM.dd')
-                                .format(post.created_at);
+                            final formattedDate = DateFormat('yyyy.MM.dd').format(post.created_at);
 
                             final imageUrl = 'http://127.0.0.1:8000${post.imageUrl}';
 
@@ -157,9 +146,7 @@ class PhotoListScreen extends ConsumerWidget {
                                             return Container(
                                               height: 130,
                                               color: Colors.grey[300],
-                                              child: const Icon(
-                                                  Icons.image_not_supported,
-                                                  color: Colors.grey),
+                                              child: const Icon(Icons.image_not_supported, color: Colors.grey),
                                             );
                                           },
                                         ),
@@ -169,8 +156,7 @@ class PhotoListScreen extends ConsumerWidget {
                                   if (isEven)
                                     Expanded(
                                       child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             post.username,
@@ -181,15 +167,11 @@ class PhotoListScreen extends ConsumerWidget {
                                           ),
                                           Text(
                                             post.title,
-                                            style: const TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.brown),
+                                            style: const TextStyle(fontSize: 16, color: Colors.brown),
                                           ),
                                           Text(
                                             formattedDate,
-                                            style: const TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.brown),
+                                            style: const TextStyle(fontSize: 14, color: Colors.brown),
                                           ),
                                         ],
                                       ),
@@ -197,8 +179,7 @@ class PhotoListScreen extends ConsumerWidget {
                                   if (!isEven)
                                     Expanded(
                                       child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
+                                        crossAxisAlignment: CrossAxisAlignment.end,
                                         children: [
                                           Text(
                                             post.username,
@@ -209,15 +190,11 @@ class PhotoListScreen extends ConsumerWidget {
                                           ),
                                           Text(
                                             post.title,
-                                            style: const TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.brown),
+                                            style: const TextStyle(fontSize: 16, color: Colors.brown),
                                           ),
                                           Text(
                                             formattedDate,
-                                            style: const TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.brown),
+                                            style: const TextStyle(fontSize: 14, color: Colors.brown),
                                           ),
                                         ],
                                       ),
@@ -237,9 +214,7 @@ class PhotoListScreen extends ConsumerWidget {
                                             return Container(
                                               height: 130,
                                               color: Colors.grey[300],
-                                              child: const Icon(
-                                                  Icons.image_not_supported,
-                                                  color: Colors.grey),
+                                              child: const Icon(Icons.image_not_supported, color: Colors.grey),
                                             );
                                           },
                                         ),
@@ -263,8 +238,7 @@ class PhotoListScreen extends ConsumerWidget {
                       fit: BoxFit.cover,
                     ),
                   ),
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0, vertical: 8.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                   child: paginatedPostsAsyncValue.when(
                     loading: () => const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -272,22 +246,20 @@ class PhotoListScreen extends ConsumerWidget {
                         CircularProgressIndicator(color: Colors.white),
                       ],
                     ),
-                    error: (err, stack) => const SizedBox.shrink(), // エラー時は非表示
+                    error: (err, stack) => const SizedBox.shrink(),
                     data: (paginatedPosts) {
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           IconButton(
-                            icon: const Icon(Icons.arrow_back_ios,
-                                color: Colors.brown, size: 20),
+                            icon: const Icon(Icons.arrow_back_ios, color: Colors.brown, size: 20),
                             onPressed: paginatedPosts.hasPreviousPage
                                 ? () => viewModel.goToPreviousPage()
-                                : null, // ページがない場合は無効化
+                                : null,
                           ),
                           const SizedBox(width: 10),
                           Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 5),
+                            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                             decoration: BoxDecoration(
                               color: Colors.brown[700],
                               borderRadius: BorderRadius.circular(15),
@@ -302,7 +274,6 @@ class PhotoListScreen extends ConsumerWidget {
                             icon: const Icon(Icons.arrow_forward_ios, color: Colors.brown, size: 20),
                             onPressed: paginatedPosts.hasNextPage
                                 ? () {
-                                    print('Next page pressed');
                                     viewModel.goToNextPage();
                                   }
                                 : null,
@@ -313,29 +284,6 @@ class PhotoListScreen extends ConsumerWidget {
                   ),
                 ),
               ],
-=======
-      body: Container(
-        child: Stack(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.black,
-                image: DecorationImage(
-                  image: AssetImage('images/background.jpg'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            SafeArea(
-              child: Center(
-                child: Text(
-                  '追加画面',
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-              ),
->>>>>>> 46d64c8ae87c790954be5f23202a614ec06c1550
             ),
           ),
         ],
