@@ -128,9 +128,9 @@ class HomePage extends ConsumerWidget {
                 children: [
                   Image.asset(
                     'images/master.png', // ★準備した画像のパスを指定★
-                    width: 150, // 画像の幅を調整（必要に応じて）
-                    height: 250, // 画像の高さを調整（必要に応じて）
-                    fit: BoxFit.cover, // 画像の表示方法を調整（必要に応じて）
+                    width: 150, // 画像の幅を調整
+                    height: 250, // 画像の高さを調整
+                    fit: BoxFit.cover, // 画像の表示方法を調整
                   ),
                   const SizedBox(height: 5),
                   const Text(

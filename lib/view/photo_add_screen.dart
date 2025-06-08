@@ -42,7 +42,9 @@ class _PhotoAddScreenState extends ConsumerState<PhotoAddScreen> {
         title: const Text('投稿画面'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.pop(),
+         onPressed: () {
+                          context.go('/list');
+                        },
         ),
       ),
       body: Stack(

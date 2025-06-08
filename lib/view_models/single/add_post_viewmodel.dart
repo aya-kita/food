@@ -35,35 +35,35 @@ class AddPostViewModel extends _$AddPostViewModel {
   }
 
   Future<void> submitPost(File file) async {
-    print('submitPost: Method started.'); // 追加
+    print('submitPost: Method started.');
     if (state.file == null) {
       state = state.copyWith(errorMessage: "画像ファイルが選択されていません");
-      print('submitPost: No file selected, returning.'); // 追加
+      print('submitPost: No file selected, returning.'); 
       return;
     }
     state = state.copyWith(isSubmitting: true, errorMessage: null);
-    print('submitPost: isSubmitting set to true.'); // 追加
+    print('submitPost: isSubmitting set to true.'); 
 
     try {
-      print('submitPost: Attempting to upload image...'); // 追加
+      print('submitPost: Attempting to upload image...'); 
       final uploadedImageUrl = await _uploadImage(state.file!);
-      print('submitPost: Image uploaded. URL: $uploadedImageUrl'); // 追加
+      print('submitPost: Image uploaded. URL: $uploadedImageUrl'); 
 
       var updatedDraft = state.draft.copyWith(imageUrl: uploadedImageUrl);
-      print('submitPost: Draft updated with imageUrl: ${updatedDraft.imageUrl}'); // 追加
+      print('submitPost: Draft updated with imageUrl: ${updatedDraft.imageUrl}'); 
 
-      print('submitPost: Attempting to post to server...'); // 追加
+      print('submitPost: Attempting to post to server...'); 
       await _postToServer(updatedDraft);
-      print('submitPost: Post to server successful.'); // 追加
+      print('submitPost: Post to server successful.');
 
       resetDraft();
-      print('submitPost: Draft reset.'); // 追加
+      print('submitPost: Draft reset.'); 
 
     } catch (e) {
-      print('submitPost: Error caught: $e'); // ここにエラーが出たら原因が分かる
+      print('submitPost: Error caught: $e');
       state = state.copyWith(errorMessage: e.toString());
     } finally {
-      print('submitPost: Finally block executed. isSubmitting set to false.'); // 追加
+      print('submitPost: Finally block executed. isSubmitting set to false.');
       state = state.copyWith(isSubmitting: false);
     }
   }
@@ -100,9 +100,7 @@ class AddPostViewModel extends _$AddPostViewModel {
     if (response.statusCode == 200) {
       final responseBody = await response.stream.bytesToString();
       final Map<String, dynamic> json = jsonDecode(responseBody);
-      // ↓↓↓ ここを修正します ↓↓↓
       if (json.containsKey('url')) return json['url'] as String; // 'imageUrl' を 'url' に変更
-      // ↑↑↑ ここを修正します ↑↑↑
       throw Exception("画像URLがレスポンスから取得できませんでした");
     } else {
       throw Exception("画像のアップロードに失敗しました: ${response.statusCode}");

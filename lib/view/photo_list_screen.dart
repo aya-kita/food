@@ -9,7 +9,6 @@ class PhotoListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // PostListViewModel から投稿データを監視
     final paginatedPostsAsyncValue = ref.watch(postListViewModelProvider); // 型が変わる
     final viewModel = ref.read(postListViewModelProvider.notifier); // リフレッシュ用
 
@@ -52,7 +51,7 @@ class PhotoListScreen extends ConsumerWidget {
                       Expanded(
                         child: GestureDetector(
                           onTap: () {
-                            print('カテゴリー選択がタップされました');
+                            print('');
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(
@@ -65,12 +64,11 @@ class PhotoListScreen extends ConsumerWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  'カテゴリー選択',
+                                  'メニュー',
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 16),
                                 ),
-                                Icon(Icons.arrow_drop_down,
-                                    color: Colors.white),
+                                
                               ],
                             ),
                           ),
