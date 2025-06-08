@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:food/view_models/single/add_post_viewmodel.dart'; 
+import 'package:food/view_models/single/add_post_viewmodel.dart';
 
 
 class PhotoAddScreen extends ConsumerWidget {
@@ -35,25 +35,26 @@ class PhotoAddScreen extends ConsumerWidget {
               Text('画像が選択されていません'),
             SizedBox(height: 8),
             ElevatedButton(
-            onPressed: () async {
-              final picker = ImagePicker();
-              final picked = await picker.pickImage(source: ImageSource.gallery);
-              if (picked != null) {
-                print("画像を選択しました: ${picked.path}");
-                notifier.addFile(File(picked.path));
-              } else {
-                print("画像の選択をキャンセルしました");
-              }
-            },
-            child: Text('画像を選択'),
-          ),
-
+              onPressed: () async {
+                final picker = ImagePicker();
+                final picked =
+                    await picker.pickImage(source: ImageSource.gallery);
+                if (picked != null) {
+                  print("画像を選択しました: ${picked.path}");
+                  notifier.addFile(File(picked.path));
+                } else {
+                  print("画像の選択をキャンセルしました");
+                }
+              },
+              child: Text('画像を選択'),
+            ),
             SizedBox(height: 16),
             if (state.errorMessage != null)
               Text(state.errorMessage!, style: TextStyle(color: Colors.red)),
             SizedBox(height: 16),
             ElevatedButton(
-              onPressed: state.isSubmitting ? null : () => notifier.submitPost(),
+              onPressed:
+                  state.isSubmitting ? null : () => notifier.submitPost(),
               child: state.isSubmitting
                   ? CircularProgressIndicator(color: Colors.white)
                   : Text('投稿'),

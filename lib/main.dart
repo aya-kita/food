@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:food/view/home.dart';
 import 'package:food/app_router.dart';
+import 'package:food/view/home.dart';
 
 Future<void> main() async {
   runApp(
@@ -18,7 +18,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       routerConfig: router,
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'Food App',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),

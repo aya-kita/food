@@ -29,10 +29,10 @@ class AddPostViewModel extends _$AddPostViewModel {
   }
 
   void addFile(File file) {
-  print('addFile called with path: ${file.path}');
-  state = state.copyWith(file: file);
-  print('state.file after update: ${state.file?.path}');
-}
+    print('addFile called with path: ${file.path}');
+    state = state.copyWith(file: file);
+    print('state.file after update: ${state.file?.path}');
+  }
 
   Future<void> submitPost() async {
     print('submitPost: Method started.'); // 追加
@@ -115,3 +115,5 @@ class AddPostViewModel extends _$AddPostViewModel {
     );
   }
 }
+
+void updateDraft({required String username}) {}

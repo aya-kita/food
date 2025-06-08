@@ -2,9 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+<<<<<<< HEAD
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart'; 
 import 'package:food/view_models/multi/photo_list_view_model.dart';
+=======
+import 'package:food/app_router.dart';
+>>>>>>> 46d64c8ae87c790954be5f23202a614ec06c1550
 
 class PhotoListScreen extends ConsumerWidget {
   PhotoListScreen({super.key});
@@ -16,6 +20,7 @@ class PhotoListScreen extends ConsumerWidget {
     final viewModel = ref.read(postListViewModelProvider.notifier); // リフレッシュ用
 
     return Scaffold(
+<<<<<<< HEAD
       body: Stack(
         children: [
           // 背景画像
@@ -308,6 +313,29 @@ class PhotoListScreen extends ConsumerWidget {
                   ),
                 ),
               ],
+=======
+      body: Container(
+        child: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.black,
+                image: DecorationImage(
+                  image: AssetImage('images/background.jpg'),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            SafeArea(
+              child: Center(
+                child: Text(
+                  '追加画面',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+>>>>>>> 46d64c8ae87c790954be5f23202a614ec06c1550
             ),
           ),
         ],
